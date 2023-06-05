@@ -27,22 +27,32 @@
 
   <!-- メイン -->
   <v-main>
-    <v-container fluid style="background: rgba(255, 255, 255, 0.8);">
+    <v-container style="background: rgba(255, 255, 255, 0.8); min-height: 100%;" fluid>
 
       <!-- 統計カード -->
       <v-row>
-        <v-col cols="12" sm="6" md="4" lg="3">
+        <v-col cols="12" sm="6" lg="4">
           <v-card class="stat">
             <v-card-title class="text-h5 font-weight-bold pa-4">クイズの数</v-card-title>
             <v-card-text class="text-h3 font-weight-bold px-8">2</v-card-text>
+          </v-card>
+        </v-col>
+
+        <!-- 新規作成 -->
+        <v-col cols="12" sm="6" md="4" lg="2">
+          <v-card class="new" height="130">
+            <v-card-title>
+              <v-icon style="margin-left: -8px;">mdi-plus</v-icon>
+              <span>New</span>
+            </v-card-title>
           </v-card>
         </v-col>
       </v-row>
 
       <!-- クイズカード -->
       <v-row>
-        <v-col cols="12" sm="6" md="4" lg="2" v-for="item in 200">
-          <v-card height="100" style="">
+        <v-col cols="12" sm="6" md="4" lg="2" v-for="item in 20">
+          <v-card height="100">
             <v-card-title>Item {{ item }}</v-card-title>
             <v-card-text>Hello!</v-card-text>
           </v-card>
@@ -87,6 +97,21 @@
 
     .v-card-text {
       line-height: 48px;
+    }
+  }
+
+  // 新規作成
+  .new {
+    color: rgba(55, 53, 47, 0.35);
+    background: none;
+    box-shadow: none;
+    border: 2px dashed rgba(55, 53, 47, 0.35);
+
+    .v-card-title {
+      padding: 49px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 </style>
