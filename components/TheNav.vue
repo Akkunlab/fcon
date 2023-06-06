@@ -8,7 +8,7 @@
 
     <!-- メニュー -->
     <v-list nav class="px-2">
-      <v-list-item v-for="menu in menuList" :key="menu.text" link>
+      <v-list-item v-for="menu in menuList" :key="menu.text" :to="menu.url">
         <template v-slot:prepend>
           <v-icon>{{ menu.icon }}</v-icon>
         </template>
@@ -23,8 +23,8 @@
 
   /* メニューリスト */
   const menuList = [
-    { icon: 'mdi-home', text: 'Home' },
-    { icon: 'mdi-help-circle', text: 'Quizzes' },
-    { icon: 'mdi-account', text: 'Users' }
+    { icon: 'mdi-home', text: 'Home', url: '/admin' },
+    { icon: 'mdi-help-circle', text: 'Quizzes', url: '/admin/quizzes' },
+    // { icon: 'mdi-account', text: 'Users', url: '/admin/users' }
   ];
 </script>

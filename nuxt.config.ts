@@ -17,6 +17,7 @@ export default defineNuxtConfig({
       "process.env.DEBUG": false,
     },
   },
+  ssr: false,
   app: {
     head: {
       charset: 'utf-16',
