@@ -25,6 +25,6 @@
   const menuList = [
     { icon: 'mdi-home', text: 'Home', url: '/admin' },
     { icon: 'mdi-help-circle', text: 'Quizzes', url: '/admin/quizzes' },
-    // { icon: 'mdi-account', text: 'Users', url: '/admin/users' }
+    { icon: 'mdi-account', text: 'Users', url: '/admin/users' }
   ];
 </script>
