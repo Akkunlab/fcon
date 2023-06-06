@@ -4,7 +4,7 @@
   <TheNav />
 
   <!-- トップバー -->
-  <TheAppBar />
+  <TheAppBar title="Home" />
 
   <!-- メイン -->
   <v-main>
