@@ -15,7 +15,7 @@
         <v-col cols="12" sm="6" lg="4">
           <v-card class="stat">
             <v-card-title class="text-h5 font-weight-bold pa-4">クイズの数</v-card-title>
-            <v-card-text class="text-h3 font-weight-bold px-8">2</v-card-text>
+            <v-card-text class="text-h3 font-weight-bold px-8">{{ quizzes?.length }}</v-card-text>
           </v-card>
         </v-col>
 
@@ -33,40 +33,52 @@
             
             <!-- 新規作成 : ダイアログ -->
             <v-card class="pa-2" style="border-radius: 15px; background: #fff;">
+              <v-form ref="form" @submit.prevent="handleSubmit">
 
-              <v-card-title class="text-h5">新規クイズ作成</v-card-title>
+                <v-card-title class="text-h5">新規クイズ作成</v-card-title>
 
-              <v-card-text class="pa-0">
-                <v-container>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field label="タイトル*" required></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field label="問題文*" required></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field label="問題の答え*" required></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <v-select :items="[1, 2, 3, 4, 5]" label="難易度*" required></v-select>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <v-autocomplete
-                        :items="['数学', '物理', '化学', '生物', '地学', '情報', '英語', '国語', '歴史', '地理', 'その他']"
-                        label="カテゴリ*" multiple>
-                      </v-autocomplete>
-                    </v-col>
-                  </v-row>
-                </v-container>
-                <small class="pa-3">*は必須フィールドです</small>
-              </v-card-text>
+                <v-card-text class="pa-0">
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field v-model="state.title" label="タイトル*" :rules="[requiredValidation]" required></v-text-field>
+                      </v-col>
+                      <v-col cols="12">
+                        <v-text-field v-model="state.text" label="問題文*" :rules="[requiredValidation]" required></v-text-field>
+                      </v-col>
+                      <v-col cols="12">
+                        <v-text-field v-model="state.answer" label="問題の答え*" :rules="[requiredValidation]" required></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6">
+                        <v-select
+                          v-model="state.difficulty"
+                          label="難易度*"
+                          :items="[1, 2, 3, 4, 5]"
+                          :rules="[requiredValidation]"
+                          required>
+                        </v-select>
+                      </v-col>
+                      <v-col cols="12" sm="6">
+                        <v-autocomplete
+                          v-model="state.category"
+                          label="カテゴリ*"
+                          :items="['数学', '物理', '化学', '生物', '地学', '情報', '英語', '国語', '歴史', '地理', 'その他']"
+                          :rules="[requiredValidation]"
+                          multiple
+                          required>
+                        </v-autocomplete>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                  <p class="pa-3">*は必須フィールドです</p>
+                </v-card-text>
 
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue-darken-1" variant="text" @click="dialog = false">Save</v-btn>
-              </v-card-actions>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn class="font-weight-bold" color="blue-darken-1" variant="text" type="submit">Save</v-btn>
+                </v-card-actions>
 
+              </v-form>
             </v-card>
           </v-dialog>
         </v-col>
@@ -74,10 +86,10 @@
 
       <!-- クイズカード -->
       <v-row>
-        <v-col cols="12" sm="6" md="4" lg="2" v-for="item in 20">
+        <v-col cols="12" sm="6" md="4" lg="2" v-for="item in quizzes">
           <v-card height="100">
-            <v-card-title>Item {{ item }}</v-card-title>
-            <v-card-text>Hello!</v-card-text>
+            <v-card-title>{{ item.title }}</v-card-title>
+            <v-card-text>{{ item.text }}</v-card-text>
           </v-card>
         </v-col>
       </v-row>
@@ -94,8 +106,63 @@
     layout: 'admin'
   });
 
+  /* Quizの型 */
+  interface Quiz {
+    title: string;
+    text: string;
+    answer: string;
+    difficulty: number;
+    category: string[];
+    createdAt?: {
+      seconds: number;
+      nanoseconds: number;
+    };
+    updatedAt?: {
+      seconds: number;
+      nanoseconds: number;
+    };
+  }
+
+  /* すべてのクイズを取得 */
+  const { data: quizzes } = await useFetch<Quiz[]>('/api/quizzes');
+
+  /* フォーム */
+  const form = ref(); // フォームの参照
+
+  // フォームの状態
+  const state = reactive<Quiz>({
+    title: '',
+    text: '',
+    answer: '',
+    difficulty: 1,
+    category: []
+  });
+
+  // バリデーション
+  const requiredValidation = (value: any) => !!value || '必ず入力してください'; // 入力必須の制約
+
+  // フォームの送信
+  const handleSubmit = async () => {
+
+    const validResult = await form.value.validate(); // バリデーションの結果を取得
+
+      // バリデーションが通ったら
+      if (validResult.valid) {
+
+        // 新しいクイズを作成
+        const { data } = await useFetch('/api/quizzes/', {
+          method: 'POST',
+          body: JSON.stringify(state)
+        });
+
+        console.log(data.value); // ログ出力
+        form.value.reset(); // フォームをリセット
+        dialog.value = false; // ダイアログを閉じる
+      }
+  }
+  
   /* ダイアログ */
-  const dialog = useState('dialog', () => false);
+  const dialog = useState('dialog', () => false); // ダイアログの状態
 </script>
 
 <style lang="scss" scoped>
