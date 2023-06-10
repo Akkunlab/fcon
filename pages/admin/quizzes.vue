@@ -45,7 +45,7 @@
   </v-main>
 
   <!-- ダイアログ -->
-  <QuizDialog ref="quizDialogRef" :title="dialogTitle" :quizzes="quizzes" />
+  <QuizDialog ref="quizDialogRef" :title="dialogTitle" :quizzes="quizzes" :index="quizIndex" />
 
 </template>
 
@@ -60,6 +60,7 @@
   /* グローバル変数 */
   const { data: quizzes } = await useFetch<Quiz[]>('/api/quizzes'); // すべてのクイズを取得
   const quizDialogRef = ref(); // クイズダイアログの参照
+  const quizIndex = ref(-1); // クイズのインデックス
   const dialogTitle = ref(''); // ダイアログのタイトル
 
   // カードをクリックしたとき
@@ -68,18 +69,19 @@
 
     if (target.classList.contains('new')) { // 新規作成だったとき
 
+      quizIndex.value = -1; // インデックスをリセット
       dialogTitle.value = 'クイズの新規作成'; // ダイアログのタイトルをセット
       quizDialogRef.value.changeState(); // クイズの情報をリセット
 
     } else { // クイズカードだったとき
 
-      const index: number = parseInt(target.getAttribute('index') || '-1', 10); // クイズカードのインデックスを取得
+      quizIndex.value = parseInt(target.getAttribute('index') || '-1', 10); // クイズカードのインデックスを取得
 
-      if (index === -1) return; // インデックスが取得できなかったら終了
+      if (quizIndex.value === -1) return; // インデックスが取得できなかったら終了
       if (quizzes.value === null) return; // クイズが存在しなかったら終了
 
       dialogTitle.value = 'クイズの編集'; // ダイアログのタイトルをセット
-      quizDialogRef.value.changeState(quizzes.value[index]); // クイズの情報をセット
+      quizDialogRef.value.changeState(quizzes.value[quizIndex.value]); // クイズの情報をセット
     }
 
     quizDialogRef.value.dialog = true; // ダイアログを開く

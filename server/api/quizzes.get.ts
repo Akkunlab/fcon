@@ -14,7 +14,8 @@ export default defineEventHandler(async () => {
     const snapshot = await getDocs(query(collection(db, 'quizzes'))); // クイズのコレクションを取得
     const docs = Array.from(snapshot.docs).map((doc) => {
       return {
-        ...doc.data()
+        ...doc.data(),
+        id: doc.id
       };
     });
 

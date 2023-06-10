@@ -5,6 +5,7 @@ export interface Quiz {
   answer: string;
   difficulty: number;
   category: string[];
+  id?: string;
   createdAt?: {
     seconds: number;
     nanoseconds: number;

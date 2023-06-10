@@ -3,7 +3,18 @@
     <v-card class="pa-2" style="border-radius: 15px; background: #fff;">
       <v-form ref="form" @submit.prevent="handleSubmit">
 
-        <v-card-title class="pt-4 text-h5">新規クイズ作成</v-card-title>
+        <v-card-title class="pt-4 text-h5" style="display: flex; align-items: center;">
+          <span>{{ title }}</span>
+          <v-btn
+            v-if="index !== -1"
+            class="mx-2"
+            icon="mdi-delete"
+            color="grey-darken-1"
+            variant="text"
+            @click.stop="deleteQuiz"
+          >
+          </v-btn>
+        </v-card-title>
 
         <v-card-text class="pa-0">
           <v-container>
@@ -41,9 +52,10 @@
           <p class="pa-3">*は必須フィールドです</p>
         </v-card-text>
 
-        <v-card-actions>
+        <v-card-actions class="py-4">
           <v-spacer></v-spacer>
-          <v-btn class="font-weight-bold" color="blue-darken-1" variant="text" type="submit">Save</v-btn>
+          <v-btn class="text-body-1 mx-2" variant="text" @click.stop="dialog = false">キャンセル</v-btn>
+          <v-btn class="text-body-1 mx-2 px-8" color="blue-accent-3" variant="flat" type="submit">保存</v-btn>
         </v-card-actions>
 
       </v-form>
@@ -58,6 +70,7 @@
   interface Props {
     title: string;
     quizzes: Quiz[] | null;
+    index: number;
   }
 
   /* グローバル変数 */
@@ -96,6 +109,19 @@
       form.value.reset(); // フォームをリセット
       dialog.value = false; // ダイアログを閉じる
     }
+  }
+
+  // クイズの削除
+  const deleteQuiz = async () => {
+
+    if (props.quizzes === null) return; // クイズが存在しなかったら終了
+
+    const id = props.quizzes[props.index].id; // クイズのIDを取得
+    const { data } = await useFetch(`/api/quizzes/${id}`, { method: 'DELETE' }); // クイズを削除
+
+    props.quizzes.splice(props.index, 1); // クイズを表示エリアから削除
+    console.log(data.value); // ログ出力
+    dialog.value = false; // ダイアログを閉じる
   }
 
   // フォームの状態を変更
