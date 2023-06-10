@@ -155,6 +155,7 @@
           body: JSON.stringify(state)
         });
 
+        quizzes.value?.push(JSON.parse(JSON.stringify(state))); // クイズを表示エリアに追加
         console.log(data.value); // ログ出力
         form.value.reset(); // フォームをリセット
         dialog.value = false; // ダイアログを閉じる
