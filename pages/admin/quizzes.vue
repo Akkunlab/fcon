@@ -92,7 +92,6 @@
   .v-card {
     border-radius: 15px;
     background: rgba(255, 255, 255, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.18);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
   }
 
