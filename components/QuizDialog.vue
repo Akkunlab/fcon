@@ -52,23 +52,7 @@
 </template>
 
 <script setup lang="ts">
-
-  /* Quizの型 */
-  interface Quiz {
-    title: string;
-    text: string;
-    answer: string;
-    difficulty: number;
-    category: string[];
-    createdAt?: {
-      seconds: number;
-      nanoseconds: number;
-    };
-    updatedAt?: {
-      seconds: number;
-      nanoseconds: number;
-    };
-  }
+  import { Quiz } from '@/types/quiz';
 
   /* Propsの型 */
   interface Props {

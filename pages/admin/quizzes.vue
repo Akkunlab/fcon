@@ -50,28 +50,12 @@
 </template>
 
 <script setup lang="ts">
+  import { Quiz } from '@/types/quiz';
 
   /* レイアウト設定 */
   definePageMeta({
     layout: 'admin'
   });
-
-  /* Quizの型 */
-  interface Quiz {
-    title: string;
-    text: string;
-    answer: string;
-    difficulty: number;
-    category: string[];
-    createdAt?: {
-      seconds: number;
-      nanoseconds: number;
-    };
-    updatedAt?: {
-      seconds: number;
-      nanoseconds: number;
-    };
-  }
 
   /* グローバル変数 */
   const { data: quizzes } = await useFetch<Quiz[]>('/api/quizzes'); // すべてのクイズを取得
