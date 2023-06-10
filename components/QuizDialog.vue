@@ -1,4 +1,6 @@
 <template>
+
+  <!-- クイズ詳細ダイアログ -->
   <v-dialog v-model="dialog" width="auto">
     <v-card class="pa-2" style="border-radius: 15px; background: #fff;">
       <v-form ref="form" @submit.prevent="handleSubmit">
@@ -11,7 +13,7 @@
             icon="mdi-delete"
             color="grey-darken-1"
             variant="text"
-            @click.stop="deleteQuiz"
+            @click.stop="deleteQuiz()"
           >
           </v-btn>
         </v-card-title>
@@ -61,6 +63,19 @@
       </v-form>
     </v-card>
   </v-dialog>
+
+  <!-- 削除確認ダイアログ -->
+  <v-dialog v-model="deleteDialog" width="auto">
+    <v-card class="pa-2" style="border-radius: 15px; background: #fff;">
+      <v-card-text class="px-4">本当にクイズを削除しますか？</v-card-text>
+      <v-card-actions class="py-4">
+        <v-spacer></v-spacer>
+        <v-btn class="text-body-1 mx-2" variant="text" @click.stop="deleteDialog = false">キャンセル</v-btn>
+        <v-btn class="text-body-1 mx-2 px-8" color="red-darken-1" variant="flat" @click.stop="deleteQuiz('delete')">削除</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
 </template>
 
 <script setup lang="ts">
@@ -76,6 +91,7 @@
   /* グローバル変数 */
   const props = defineProps<Props>(); // propsの初期化
   const dialog = useState('dialog', () => false); // ダイアログの状態
+  const deleteDialog = useState('deleteDialog', () => false); // 削除ダイアログの状態
   const form = ref(); // フォームの参照
 
   // フォームの状態
@@ -112,16 +128,24 @@
   }
 
   // クイズの削除
-  const deleteQuiz = async () => {
+  const deleteQuiz = async (value?: string) => {
 
     if (props.quizzes === null) return; // クイズが存在しなかったら終了
 
+    // 削除ダイアログの値がないとき
+    if (!value) {
+      deleteDialog.value = true; // 削除ダイアログを表示
+      return;
+    }
+
+    // 削除
     const id = props.quizzes[props.index].id; // クイズのIDを取得
     const { data } = await useFetch(`/api/quizzes/${id}`, { method: 'DELETE' }); // クイズを削除
 
     props.quizzes.splice(props.index, 1); // クイズを表示エリアから削除
     console.log(data.value); // ログ出力
     dialog.value = false; // ダイアログを閉じる
+    deleteDialog.value = false; // 削除ダイアログを閉じる
   }
 
   // フォームの状態を変更
