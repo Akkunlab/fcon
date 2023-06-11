@@ -5,6 +5,7 @@
     <v-card class="pa-2" style="border-radius: 15px; background: #fff;">
       <v-form ref="form" @submit.prevent="handleSubmit">
 
+        <!-- タイトル -->
         <v-card-title class="pt-4 text-h5" style="display: flex; align-items: center;">
           <span>{{ title }}</span>
           <v-btn
@@ -18,6 +19,7 @@
           </v-btn>
         </v-card-title>
 
+        <!-- input -->
         <v-card-text class="pa-0">
           <v-container>
             <v-row>
@@ -54,6 +56,7 @@
           <p class="pa-3">*は必須フィールドです</p>
         </v-card-text>
 
+        <!-- ボタン -->
         <v-card-actions class="py-4">
           <v-spacer></v-spacer>
           <v-btn class="text-body-1 mx-2" variant="text" @click.stop="dialog = false">キャンセル</v-btn>
@@ -108,23 +111,30 @@
 
   // フォームの送信
   const handleSubmit = async () => {
-
-    const validResult = await form.value.validate(); // バリデーションの結果を取得
-
-    // バリデーションが通ったら
-    if (validResult.valid) {
     
-      // 新しいクイズを作成
-      const { data } = await useFetch('/api/quizzes/', {
-        method: 'POST',
-        body: JSON.stringify(state)
-      });
+    const validResult = await form.value.validate(); // バリデーションの結果を取得
+    let url: string; // URLの初期化
+    let method: "GET" | "POST" | "PUT" | "DELETE"; // メソッドの初期化
 
-      props.quizzes?.push(JSON.parse(JSON.stringify(state))); // クイズを表示エリアに追加
-      console.log(data.value); // ログ出力
-      form.value.reset(); // フォームをリセット
-      dialog.value = false; // ダイアログを閉じる
+    if (!validResult.valid) return; // バリデーションに失敗したら終了
+    if (props.quizzes === null) return; // クイズが存在しなかったら終了
+
+    if (props.index === -1) { // 新規作成
+      url = '/api/quizzes/';
+      method = 'POST';
+      props.quizzes.push(JSON.parse(JSON.stringify(state))); // クイズを表示エリアに追加
+    } else { // 編集
+      const id = props.quizzes[props.index].id; // クイズのIDを取得
+      
+      url = `/api/quizzes/${id}`;
+      method = 'PUT';
+      props.quizzes[props.index] = { ...state, id }; // 表示エリアのクイズを更新
     }
+
+    const { data } = await useFetch(url, { method, body: JSON.stringify(state) }); // クイズを作成または更新
+
+    console.log(data.value); // ログ出力
+    dialog.value = false; // ダイアログを閉じる
   }
 
   // クイズの削除
