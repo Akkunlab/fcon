@@ -5,7 +5,7 @@ URI: /api/quizzes
 Description: 新しいクイズを作成
 ============================================ */
 
-import { db } from '../lib/firestore';
+import { db } from '../../lib/firestore';
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 
 export default defineEventHandler(async (event) => {

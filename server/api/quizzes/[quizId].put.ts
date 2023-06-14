@@ -1,7 +1,7 @@
 /* ============================================
 No.4
 Method: PUT
-URI: /api/quizzes/{quizzesId}
+URI: /api/quizzes/{quizId}
 Description: 特定のクイズを更新
 ============================================ */
 
@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
     body.updatedAt = Timestamp.fromDate(new Date()); // 更新日時を追加
 
     // @ts-ignore
-    const docRef = await updateDoc(doc(db, 'quizzes', event.context.params.quizzesId), body); // ドキュメントを更新
+    const docRef = await updateDoc(doc(db, 'quizzes', event.context.params.quizId), body); // ドキュメントを更新
 
     return { result: 'success' };
   } catch (error) {

@@ -5,7 +5,7 @@ URI: /api/quizzes
 Description: すべてのクイズを取得
 ============================================ */
 
-import { db } from '../lib/firestore';
+import { db } from '../../lib/firestore';
 import { collection, getDocs, query } from 'firebase/firestore';
 
 export default defineEventHandler(async () => {

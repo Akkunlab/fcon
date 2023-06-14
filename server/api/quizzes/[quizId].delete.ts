@@ -1,7 +1,7 @@
 /* ============================================
 No.5
 Method: DELETE
-URI: /api/quizzes/{quizzesId}
+URI: /api/quizzes/{quizId}
 Description: 特定のクイズを削除
 ============================================ */
 
@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   try {
 
     // @ts-ignore
-    await deleteDoc(doc(db, 'quizzes', event.context.params.quizzesId)); // ドキュメントを削除
+    await deleteDoc(doc(db, 'quizzes', event.context.params.quizId)); // ドキュメントを削除
 
     return { result: 'success' };
   } catch (error) {
