@@ -2,6 +2,13 @@
   <v-sheet class="splash-screen" @click="handleScreenClick($event)">
     <v-container class="splash-screen-inner">
 
+      <!-- オーディオ -->
+      <v-row class="audio ma-2">
+        <v-col>
+          <v-btn class="audio-btn" :icon="audioIcon" @click.stop="handleScreenClick($event)"></v-btn>
+        </v-col>
+      </v-row>
+
       <!-- メイン -->
       <v-main class="main">
 
@@ -41,13 +48,29 @@
 
 <script setup lang="ts">
 
+/* グローバル変数 */
+  const audioIcon = ref('mdi-volume-mute'); // オーディオアイコン
+  const audio = new Audio('audio/bgm.mp3'); // オーディオを作成
+
+  audio.loop = true; // ループ再生にする
+  audio.muted = true; // ミュートにする
+  audio.autoplay = true; // 自動再生にする
+
   /* スプラッシュ画面をクリックしたとき */
   const handleScreenClick = (event: PointerEvent): void => {
     const target = event.currentTarget as HTMLElement; // クリックした要素を取得
 
     if (target.classList.contains('splash-screen')) { // スプラッシュ画面だったとき
+
       target.classList.add('fade-out'); // フェードアウトさせる
       setTimeout(() => target.remove(), 1000); // 1秒後にスプラッシュ画面を削除
+
+    } else if (target.classList.contains('audio-btn')) { // オーディオだったとき
+
+      audio.currentTime = 0; // 最初から再生
+      audio.muted = !audio.muted; // ミュートを切り替える
+      audioIcon.value = audio.muted ? 'mdi-volume-mute' : 'mdi-volume-high'; // アイコンを切り替える
+
     }
   }
 </script>
@@ -58,8 +81,10 @@
   $background-color: #fff;
   $primary-color: #1B95D4;
   $secondary-color: #9C27B0;
+  $secondary-color-light: #dd92ea;
   $text-color: #000;
   $text-color-light: #fff;
+  $shadow-color: rgba(0, 0, 0, 0.2);
 
   /* スプラッシュ画面 */
   .splash-screen {
@@ -89,6 +114,24 @@
                      0 0 3px $background-color,
                      0 0 3px $background-color,
                      0 0 3px $background-color;
+      }
+
+      // オーディオ
+      .audio {
+        inset: 0 auto auto 0; // top right bottom left
+        position: absolute;
+        z-index: 1;
+
+        // オーディオボタン
+        .audio-btn {
+          color: $primary-color;
+          border: 2px solid transparent;
+          background-image: linear-gradient($background-color, $background-color),
+                            linear-gradient(135deg, $primary-color 0, $secondary-color-light 50%, $primary-color 100%);
+          background-origin: padding-box, border-box;
+          background-clip: padding-box, border-box;
+          box-shadow: 0 3px 3px $shadow-color;
+        }
       }
 
       // メイン
@@ -127,7 +170,7 @@
             color: $text-color-light;
             position: relative;
             display: inline-block;
-            text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
+            text-shadow: 0px 0px 3px $shadow-color;
             animation: blink 3.3s infinite; // 点滅
 
             &::after {
