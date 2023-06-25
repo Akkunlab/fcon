@@ -109,8 +109,8 @@
             color: $text-color-light;
             position: relative;
             display: inline-block;
-            text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-            animation: blink 3s infinite; // 点滅
+            text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
+            animation: blink 3.3s infinite; // 点滅
 
             &::after {
               content: '';
