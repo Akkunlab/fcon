@@ -8,13 +8,22 @@ export default defineNuxtConfig({
     firebaseMessagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
     firebaseAppId: process.env.FIREBASE_APP_ID,
   },
-  css: ["vuetify/lib/styles/main.sass"],
+  css: ['vuetify/lib/styles/main.sass'],
   build: {
-    transpile: ["vuetify"],
+    transpile: ['vuetify'],
+  },
+  modules: ['@nuxtjs/google-fonts'],
+  googleFonts: {
+    families: {
+      Roboto: true,
+      'Noto+Sans+JP': true
+    },
+    download: true,
+    inject: true
   },
   vite: {
     define: {
-      "process.env.DEBUG": false,
+      'process.env.DEBUG': false,
     },
   },
   ssr: false,
