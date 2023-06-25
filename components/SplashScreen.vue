@@ -1,5 +1,5 @@
 <template>
-  <v-sheet class="splash-screen">
+  <v-sheet class="splash-screen" @click="handleScreenClick($event)">
     <v-container class="splash-screen-inner">
 
       <!-- メイン -->
@@ -39,6 +39,19 @@
   </v-sheet>
 </template>
 
+<script setup lang="ts">
+
+  /* スプラッシュ画面をクリックしたとき */
+  const handleScreenClick = (event: PointerEvent): void => {
+    const target = event.currentTarget as HTMLElement; // クリックした要素を取得
+
+    if (target.classList.contains('splash-screen')) { // スプラッシュ画面だったとき
+      target.classList.add('fade-out'); // フェードアウトさせる
+      setTimeout(() => target.remove(), 1000); // 1秒後にスプラッシュ画面を削除
+    }
+  }
+</script>
+
 <style lang="scss" scoped>
 
   /* 変数 */
@@ -56,6 +69,11 @@
     cursor: pointer; // カーソルをポインターにする
     position: fixed;
     z-index: 10000;
+
+    // フェードアウト
+    &.fade-out {
+      animation: fadeOut 0.8s ease forwards;
+    }
 
     .splash-screen-inner {
       height: 100%;
@@ -136,6 +154,16 @@
   }
 
   /* アニメーション */
+
+  // フェードアウト
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
 
   // 点滅
   @keyframes blink {
