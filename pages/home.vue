@@ -111,6 +111,7 @@
       .background-inner {
         width: 100%;
         height: 100%;
+        box-shadow: 0px 0px 200px 10px rgba(27, 150, 212, 0.2) inset;
         background: url('images/background.jpg') no-repeat center center / cover;
       }
     }
