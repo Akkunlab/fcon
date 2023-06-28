@@ -22,6 +22,13 @@ export default defineNuxtConfig({
     inject: true
   },
   vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: '@import "@/assets/style/common.scss";',
+        },
+      },
+    },
     define: {
       'process.env.DEBUG': false,
     },

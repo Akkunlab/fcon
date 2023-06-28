@@ -75,15 +75,6 @@
 
 <style lang="scss" scoped>
 
-  /* 変数 */
-  $background-color: #fff;
-  $primary-color: #1B95D4;
-  $secondary-color: #9C27B0;
-  $secondary-color-light: #dd92ea;
-  $text-color: #000;
-  $text-color-light: #fff;
-  $shadow-color: rgba(0, 0, 0, 0.2);
-
   /* ホーム画面 */
   .home {
     width: 100%;
@@ -118,9 +109,9 @@
       color: $text-color-light;
 
       .status-text {
-        border-radius: 15px;
-        backdrop-filter: blur(3px);
-        background: rgba(0, 30, 30, 0.8);
+        border-radius: $border-radius;
+        backdrop-filter: blur($blur-size);
+        background: $home-status-background-color;
       }
     }
 
@@ -134,7 +125,7 @@
       .background-inner {
         width: 100%;
         height: 100%;
-        box-shadow: 0px 0px 200px 10px rgba(27, 150, 212, 0.2) inset;
+        box-shadow: 0px 0px 200px 10px $home-background-color inset;
         background: url('images/background.jpg') no-repeat center center / cover;
       }
     }
@@ -149,13 +140,13 @@
         width: 72px;
         height: 72px;
         border-radius: 50%;
-        backdrop-filter: blur(3px);
+        backdrop-filter: blur($blur-size);
         color: $text-color-light;
         position: relative;
         font-size: 0.7em;
-        border: 1px solid rgba(255, 255, 255, 0.8);
-        background: rgba(0, 30, 30, 0.3);
-        box-shadow: 0px 0px 10px 1px rgba(255, 255, 255, 0.2) inset;
+        border: 1px solid $home-btn-border-color;
+        background: $home-btn-background-color;
+        box-shadow: 0px 0px 10px 1px $home-btn-shadow-color inset;
         text-shadow: 0 0 3px $primary-color,
                      0 0 3px $primary-color,
                      0 0 3px $primary-color,

@@ -53,23 +53,14 @@
 
 <style lang="scss" scoped>
 
-  /* 変数 */
-  $background-color: #fff;
-  $primary-color: #1B95D4;
-  $secondary-color: #9C27B0;
-  $secondary-color-light: #dd92ea;
-  $text-color: #000;
-  $text-color-light: #fff;
-  $shadow-color: rgba(0, 0, 0, 0.2);
-
   /* ダイアログ */
   .dialog-card {
     color: $text-color-light;
-    backdrop-filter: blur(3px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    background: rgba(17, 17, 17, 0.8);
     position: relative;
-    border-radius: 15px !important;
+    backdrop-filter: blur($blur-size);
+    border: 1px solid $dialog-border-color;
+    background: $dialog-background-color;
+    border-radius: $border-radius !important;
 
     // 閉じるボタン
     .dialog-close {
@@ -84,8 +75,8 @@
       // メニュー項目
       .dialog-menu-item {
         color: $text-color-light;
-        background: rgba(33, 33, 33, 0.9);
-        border: 2px solid rgba(89, 107, 121, 0.8);
+        background: $dialog-btn-background-color;
+        border: 2px solid $dialog-btn-border-color;
       }
     }
   }

@@ -77,15 +77,6 @@
 
 <style lang="scss" scoped>
 
-  /* 変数 */
-  $background-color: #fff;
-  $primary-color: #1B95D4;
-  $secondary-color: #9C27B0;
-  $secondary-color-light: #dd92ea;
-  $text-color: #000;
-  $text-color-light: #fff;
-  $shadow-color: rgba(0, 0, 0, 0.2);
-
   /* スプラッシュ画面 */
   .splash-screen {
     width: 100%;
