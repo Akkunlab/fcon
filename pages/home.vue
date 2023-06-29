@@ -1,7 +1,7 @@
 <template>
 
   <!-- スプラッシュ画面 -->
-  <SplashScreen />
+  <SplashScreen v-if="$route.query.ss !== 'false'"/>
 
   <!-- ホーム画面 -->
   <v-container class="home">

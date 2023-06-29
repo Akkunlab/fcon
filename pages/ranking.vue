@@ -6,7 +6,7 @@
     <!-- タイトル -->
     <v-row class="title">
       <v-col class="pa-0" style="display: flex;">
-        <v-btn icon="mdi-arrow-left" variant="text" to="/home"></v-btn>
+        <v-btn icon="mdi-arrow-left" variant="text" to="/home?ss=false"></v-btn>
         <p class="title-text text-center py-2 mx-2">ランキング</p>
       </v-col>
     </v-row>
