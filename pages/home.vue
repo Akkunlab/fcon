@@ -28,7 +28,7 @@
     <!-- ホームアクション -->
     <v-row class="home-action my-5 mx-0">
       <v-col cols="4" v-for="btn in btnList" :key="btn.name">
-        <v-btn :id="btn.id" class="home-action-btn" @click.stop="handleBtnClick($event)">
+        <v-btn :id="btn.id" class="home-action-btn" :to="btn.url" @click.stop="handleBtnClick($event)">
           <div class="home-action-btn-inner">
             <v-icon class="home-action-btn-icon" size="32">{{ btn.icon }}</v-icon>
             <p>{{ btn.name }}</p>
@@ -51,25 +51,29 @@
 
   // ホームボタンリスト
   const btnList = [
-    { id: 'ranking', icon: 'mdi-crown', name: 'ランキング' },
-    { id: 'quest', icon: 'mdi-sword-cross', name: 'クエスト' },
-    { id: 'menu', icon: 'mdi-menu', name: 'メニュー' }
+    {
+      id: 'ranking',
+      icon: 'mdi-crown',
+      name: 'ランキング',
+      url: '/ranking'
+    }, {
+      id: 'quest',
+      icon: 'mdi-sword-cross',
+      name: 'クエスト',
+      url: undefined
+    }, {
+      id: 'menu',
+      icon: 'mdi-menu',
+      name: 'メニュー',
+      url: undefined
+    }
   ];
 
   /* ボタンをクリックしたとき */
   const handleBtnClick = (event: PointerEvent): void => {
     const target = event.currentTarget as Element; // カードの種類を判定
 
-    // ボタンのidによって処理を分岐
-    switch (target.id) {
-      case 'ranking':
-        break;
-      case 'quest':
-        break;
-      case 'menu':
-        appDialogRef.value.dialog = true; // ダイアログを開く
-        break;
-    }
+    if (target.id === 'menu') appDialogRef.value.dialog = true; // ダイアログを開く
   }
 </script>
 

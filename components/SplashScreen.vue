@@ -88,7 +88,7 @@
 
     // フェードアウト
     &.fade-out {
-      animation: fadeOut 0.8s ease forwards;
+      animation: fadeOut $fade-time ease forwards;
     }
 
     .splash-screen-inner {
@@ -184,102 +184,6 @@
         margin: auto;
         position: absolute;
       }
-    }
-  }
-
-  /* アニメーション */
-
-  // フェードアウト
-  @keyframes fadeOut {
-    0% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
-    }
-  }
-
-  // 点滅
-  @keyframes blink {
-    0% {
-      opacity: 0.9;
-    }
-    50% {
-      opacity: 0.3;
-    }
-    100% {
-      opacity: 0.9;
-    }
-  }
-
-  // 下に移動
-  @keyframes moveDown {
-    0%, 30% {
-      opacity: 0;
-      transform: scale(2) translateY(-30px);
-      filter: brightness(250%) blur(5px);
-    }
-    30%, 70% {
-      opacity: 1;
-      transform: scale(2) translateY(30px);
-      filter: brightness(100%) blur(0);
-    }
-    90%, 100% {
-      opacity: 0;
-      transform: scale(2) translateY(30px);
-      filter: brightness(250%) blur(5px);
-    }
-  }
-
-  // 右に移動
-  @keyframes moveRight {
-    0%, 30% {
-      opacity: 0;
-      transform: scale(2) translateX(-30px);
-      filter: brightness(250%) blur(5px);
-    }
-    30%, 70% {
-      opacity: 1;
-      transform: scale(2) translateX(30px);
-      filter: brightness(100%) blur(0);
-    }
-    90%, 100% {
-      opacity: 0;
-      transform: scale(2) translateX(30px);
-      filter: brightness(250%) blur(5px);
-    }
-  }
-
-  // 左に移動
-  @keyframes moveLeft {
-    0%, 30% {
-      opacity: 0;
-      transform: scale(2) translateX(30px);
-      filter: brightness(250%) blur(5px);
-    }
-    30%, 70% {
-      opacity: 1;
-      transform: scale(2) translateX(-30px);
-      filter: brightness(100%) blur(0);
-    }
-    90%, 100% {
-      opacity: 0;
-      transform: scale(2) translateX(-30px);
-      filter: brightness(250%) blur(5px);
-    }
-  }
-  
-  // 大きさ縮小
-  @keyframes moveScale {
-    0%, 30% {
-      opacity: 0;
-      transform: scale(1.3);
-      filter: brightness(250%) blur(5px);
-    }
-    30%, 100% {
-      opacity: 1;
-      transform: scale(1);
-      filter: brightness(100%) blur(0);
     }
   }
 </style>

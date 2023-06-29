@@ -6,7 +6,7 @@
     <!-- タイトル -->
     <v-row class="title">
       <v-col class="pa-0" style="display: flex;">
-        <v-btn icon="mdi-arrow-left" variant="text"></v-btn>
+        <v-btn icon="mdi-arrow-left" variant="text" to="/home"></v-btn>
         <p class="title-text text-center py-2 mx-2">ランキング</p>
       </v-col>
     </v-row>
@@ -86,6 +86,7 @@
       background: $dialog-background-color;
       border-radius: $border-radius !important;
       overflow-y: scroll;
+      animation: fadeIn $fade-time ease forwards; // フェードイン
 
       // ランキング
       .ranking-list {
