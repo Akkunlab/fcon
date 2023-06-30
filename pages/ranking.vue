@@ -1,38 +1,41 @@
 <template>
 
   <!-- ランキング画面 -->
-  <v-container class="ranking">
-
-    <!-- タイトル -->
-    <v-row class="title">
-      <v-col class="pa-0" style="display: flex;">
-        <v-btn icon="mdi-arrow-left" variant="text" to="/home?ss=false"></v-btn>
-        <p class="title-text text-center py-2 mx-2">ランキング</p>
-      </v-col>
-    </v-row>
-
-    <!-- ランキングリスト -->
-    <v-card class="ranking-card my-3">
-      <v-card-text>
-        <v-list class="ranking-list pa-0">
-          <v-list-item class="ranking-item my-2" v-for="item in 100" height="50" rounded="xl">
-            <v-container class="pa-0" style="display: flex; align-items: center;">
-              <p class="text-body-1">1</p>
-              <v-avatar size="32" color="surface-variant" class="mx-2"></v-avatar>
-              <v-list-item-title class="text-body-1" v-text="33333333"></v-list-item-title>
-              <p style="margin-left: auto; white-space: nowrap">10000 pt</p>
-            </v-container>
-          </v-list-item>
-        </v-list>
-      </v-card-text>
-    </v-card>
-
-  </v-container>
+  <div class="ranking background-fixed">
+    <v-container class="ranking-inner">
+          
+      <!-- タイトル -->
+      <v-row class="title">
+        <v-col class="pa-0" style="display: flex;">
+          <v-btn icon="mdi-arrow-left" variant="text" @click.stop="$pageTransition('ranking-inner', '/home', { ss: 'false' })"></v-btn>
+          <p class="title-text text-center py-2 mx-2">ランキング</p>
+        </v-col>
+      </v-row>
+      
+      <!-- ランキングリスト -->
+      <v-card class="ranking-card fade-in my-3">
+        <v-card-text>
+          <v-list class="ranking-list pa-0">
+            <v-list-item class="ranking-item my-2" v-for="item in 100" height="50" rounded="xl">
+              <v-container class="pa-0" style="display: flex; align-items: center;">
+                <p class="text-body-1">1</p>
+                <v-avatar size="32" color="surface-variant" class="mx-2"></v-avatar>
+                <v-list-item-title class="text-body-1" v-text="33333333"></v-list-item-title>
+                <p style="margin-left: auto; white-space: nowrap">10000 pt</p>
+              </v-container>
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+      </v-card>
+    
+    </v-container>
+  </div>
 </template>
 
 <script setup lang="ts">
 
   /* グローバル変数 */
+  const { $pageTransition } = useNuxtApp(); // ページ遷移
 
   // ランキングリスト
   const rankingList = [
@@ -54,11 +57,6 @@
 
   /* ランキング */
   .ranking {
-    width: 100%;
-    height: 100%;
-    inset: 0 auto auto 0; // top right bottom left
-    position: fixed;
-    background: url('images/background.jpg') no-repeat center center / cover;
 
     // タイトル
     .title {
@@ -86,7 +84,6 @@
       background: $dialog-background-color;
       border-radius: $border-radius !important;
       overflow-y: scroll;
-      animation: fadeIn $fade-time ease forwards; // フェードイン
 
       // ランキング
       .ranking-list {

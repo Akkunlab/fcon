@@ -4,40 +4,42 @@
   <SplashScreen v-if="$route.query.ss !== 'false'"/>
 
   <!-- ホーム画面 -->
-  <v-container class="home">
+  <div class="home background-fixed">
+    <v-container class="home-inner fade-in">
 
-    <!-- タイトル -->
-    <v-row class="title ma-1">
-      <v-col>
-        <p class="title-text">ホーム</p>
-      </v-col>
-    </v-row>
+      <!-- タイトル -->
+      <v-row class="title ma-1">
+        <v-col>
+          <p class="title-text">ホーム</p>
+        </v-col>
+      </v-row>
 
-    <!-- ステータス -->
-    <v-row class="status ma-1 mt-4">
-      <v-col>
-        <p class="status-text pl-8 pr-3">ポイント: 333</p>
-      </v-col>
-    </v-row>
+      <!-- ステータス -->
+      <v-row class="status ma-1 mt-4">
+        <v-col>
+          <p class="status-text pl-8 pr-3">ポイント: 333</p>
+        </v-col>
+      </v-row>
 
-    <!-- 背景 -->
-    <v-row class="background">
-      <v-sheet class="background-inner"></v-sheet>
-    </v-row>
+      <!-- 背景 -->
+      <v-row class="background">
+        <v-sheet class="background-inner"></v-sheet>
+      </v-row>
 
-    <!-- ホームアクション -->
-    <v-row class="home-action my-5 mx-0">
-      <v-col cols="4" v-for="btn in btnList" :key="btn.name">
-        <v-btn :id="btn.id" class="home-action-btn" :to="btn.url" @click.stop="handleBtnClick($event)">
-          <div class="home-action-btn-inner">
-            <v-icon class="home-action-btn-icon" size="32">{{ btn.icon }}</v-icon>
-            <p>{{ btn.name }}</p>
-          </div>
-        </v-btn>
-      </v-col>
-    </v-row>
+      <!-- ホームアクション -->
+      <v-row class="home-action my-5 mx-0">
+        <v-col cols="4" v-for="btn in btnList" :key="btn.name">
+          <v-btn :id="btn.id" class="home-action-btn" @click.stop="handleBtnClick($event)">
+            <div class="home-action-btn-inner">
+              <v-icon class="home-action-btn-icon" size="32">{{ btn.icon }}</v-icon>
+              <p>{{ btn.name }}</p>
+            </div>
+          </v-btn>
+        </v-col>
+      </v-row>
 
-  </v-container>
+    </v-container>
+  </div>
 
   <!-- ダイアログ -->
   <AppDialog ref="appDialogRef" />
@@ -47,33 +49,26 @@
 <script setup lang="ts">
 
   /* グローバル変数 */
+  const { $pageTransition } = useNuxtApp(); // ページ遷移
   const appDialogRef = ref(); // ダイアログ
 
   // ホームボタンリスト
   const btnList = [
-    {
-      id: 'ranking',
-      icon: 'mdi-crown',
-      name: 'ランキング',
-      url: '/ranking'
-    }, {
-      id: 'quest',
-      icon: 'mdi-sword-cross',
-      name: 'クエスト',
-      url: undefined
-    }, {
-      id: 'menu',
-      icon: 'mdi-menu',
-      name: 'メニュー',
-      url: undefined
-    }
+    { id: 'ranking', icon: 'mdi-crown', name: 'ランキング' },
+    { id: 'quest', icon: 'mdi-sword-cross', name: 'クエスト' },
+    { id: 'menu', icon: 'mdi-menu', name: 'メニュー' }
   ];
 
   /* ボタンをクリックしたとき */
   const handleBtnClick = (event: PointerEvent): void => {
     const target = event.currentTarget as Element; // カードの種類を判定
 
-    if (target.id === 'menu') appDialogRef.value.dialog = true; // ダイアログを開く
+    // ボタンの種類によって処理を分岐
+    switch (target.id) {
+      case 'ranking': $pageTransition('home-inner', '/ranking'); break; // ランキング画面へ遷移
+      case 'quest': break;
+      case 'menu': appDialogRef.value.dialog = true; break; // ダイアログを開く
+    }
   }
 </script>
 
@@ -81,11 +76,7 @@
 
   /* ホーム画面 */
   .home {
-    width: 100%;
-    height: 100%;
-    inset: 0 auto auto 0; // top right bottom left
     text-align: center;
-    position: fixed;
 
     // タイトル
     .title {
@@ -130,7 +121,7 @@
         width: 100%;
         height: 100%;
         box-shadow: 0px 0px 200px 10px $home-background-color inset;
-        background: url('images/background.jpg') no-repeat center center / cover;
+        background: transparent;
       }
     }
     
