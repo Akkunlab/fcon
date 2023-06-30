@@ -8,15 +8,15 @@
     <v-container class="home-inner fade-in">
 
       <!-- タイトル -->
-      <v-row class="title ma-1">
+      <v-row class="title">
         <v-col>
-          <p class="title-text">ホーム</p>
+          <p class="title-text py-3 mx-2">ホーム</p>
         </v-col>
       </v-row>
 
       <!-- ステータス -->
-      <v-row class="status ma-1 mt-4">
-        <v-col>
+      <v-row class="status mx-2 mt-3">
+        <v-col class="px-0">
           <p class="status-text pl-8 pr-3">ポイント: 333</p>
         </v-col>
       </v-row>
