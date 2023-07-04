@@ -17,6 +17,7 @@
     "sass": "^1.62.1"
   },
   "dependencies": {
+    "@fingerprintjs/fingerprintjs": "^3.4.1",
     "firebase": "^9.22.0",
     "vuetify": "^3.3.1"
   }
