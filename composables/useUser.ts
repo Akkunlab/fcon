@@ -1,15 +1,7 @@
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import { User } from '@/types/user';
 
-/* ユーザ情報 */
-
-// ユーザ情報の型定義
-interface User {
-  id: string;
-  name: string;
-  mail: string;
-}
-
-// データの型
+/* データの型 */
 interface Data {
   value: {
     result: string;
@@ -35,9 +27,9 @@ export const useUser = () => {
   // ユーザ情報を取得
   const user = useState<User>('user', () => {
     return {
-      id: '012345',
-      name: 'mamezou',
-      mail: 'nuxt-developer@mamezou.com'
+      name: '',
+      ranking: 0,
+      point: 0
     }
   });
 
@@ -82,11 +74,12 @@ export const useUser = () => {
       // Authorizationヘッダーが存在しない場合はエラーをスロー
       if (!authorizationHeader) throw new Error('Authorization header not found');
 
-      // login idを抽出
-      const loginId: string = authorizationHeader.split(' ')[1];
+      const { data } = await response.json(); // レスポンスのJSONを取得
+      const loginId: string = authorizationHeader.split(' ')[1]; // login idを抽出
 
       loginIdCookie.value = loginId; // Cookieにlogin idを保存
       isLoggedInCookie.value = 'true'; // ログイン状態をtrueにする
+      user.value = data; // ユーザ情報を更新
 
       await navigateTo('/home'); // ホーム画面に遷移
     } catch (error) {

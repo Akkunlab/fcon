@@ -64,7 +64,7 @@
   
     if (!validResult.valid) return; // バリデーションに失敗したら終了
 
-    signup(name.value); // サインアップ
+    await signup(name.value); // サインアップ
     $pageTransition('signup-inner', '/login'); // ログイン画面へ遷移
   }
 </script>

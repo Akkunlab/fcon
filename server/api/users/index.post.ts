@@ -19,6 +19,8 @@ export default defineEventHandler(async (event) => {
     body.login = randomBytes(32).toString('hex'); // ランダムな32バイトの値を生成
     body.salt = randomBytes(16).toString('hex'); // ランダムな16バイトのソルトを生成
     body.id = createHash('sha256').update(body.id + body.salt).digest('hex'); // ハッシュ化
+    body.ranking = 0;
+    body.point = 0;
 
     const docRef = await addDoc(collection(db, 'users'), body); // ユーザのコレクションにドキュメントを追加
 

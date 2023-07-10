@@ -8,18 +8,14 @@ Description: ユーザのログイン認証
 import { db } from '../lib/firestore';
 import { collection, doc, updateDoc, query, where, getDocs, Timestamp } from "firebase/firestore";
 import { randomBytes, createHash } from 'crypto';
-
-/* レスポンス用のオブジェクトの型 */
-interface ResponseObject {
-  result: string;
-}
+import { User } from '@/types/user';
 
 export default defineEventHandler(async (event) => {
 
   try {
+    let user: User | undefined; // ユーザ情報
     let docId: string = ''; // ドキュメントID
     const body = await readBody(event); // リクエストボディを取得
-    const result: ResponseObject = { result: 'Authentication failed' }; // レスポンス用のオブジェクト
 
     // idまたはloginが存在しない場合はエラーを返す
     if (!body.id || !body.login) throw createError({ statusCode: 400, statusMessage: 'Invalid id or login value' });
@@ -33,11 +29,19 @@ export default defineEventHandler(async (event) => {
     
     // ドキュメントが存在する場合
     querySnapshot.forEach((docData) => {
-      docId = docData.id; // ドキュメントIDを取得
       body.id = createHash('sha256').update(body.id + docData.data().salt).digest('hex'); // ハッシュ化
 
       // ログイン失敗
       if (docData.data().id !== body.id) throw createError({ statusCode: 401, statusMessage: 'Authentication failed' });
+
+      // ログイン成功
+      user = {
+        name: docData.data().name,
+        ranking: docData.data().ranking,
+        point: docData.data().point
+      };
+
+      docId = docData.id; // ドキュメントIDを取得
     });
 
     // ログイン成功
@@ -50,9 +54,8 @@ export default defineEventHandler(async (event) => {
     });
 
     event.node.res.setHeader('Authorization', `Bearer ${loginId}`); // login idをヘッダーにセット
-    result.result = 'success';
 
-    return result;
+    return { result: 'success', data: user };
   } catch (error) {
     return error;
   }
