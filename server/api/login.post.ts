@@ -6,7 +6,7 @@ Description: ユーザのログイン認証
 ============================================ */
 
 import { db } from '../lib/firestore';
-import { collection, doc, updateDoc, query, where, getDocs } from "firebase/firestore";
+import { collection, doc, updateDoc, query, where, getDocs, Timestamp } from "firebase/firestore";
 import { randomBytes, createHash } from 'crypto';
 
 /* レスポンス用のオブジェクトの型 */
@@ -42,8 +42,13 @@ export default defineEventHandler(async (event) => {
 
     // ログイン成功
     const loginId = randomBytes(32).toString('hex'); // login idを生成
-    const docRef = await updateDoc(doc(db, 'users', docId), { login: loginId }); // ドキュメントを更新
-    
+
+    // ドキュメントを更新
+    const docRef = await updateDoc(doc(db, 'users', docId), {
+      login: loginId, // login idを更新
+      lastSignedIn: Timestamp.fromDate(new Date()) // 最終ログイン日時を更新
+    });
+
     event.node.res.setHeader('Authorization', `Bearer ${loginId}`); // login idをヘッダーにセット
     result.result = 'success';
 
