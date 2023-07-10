@@ -48,6 +48,11 @@
 
 <script setup lang="ts">
 
+  /* 認証必須 */
+  definePageMeta({
+    middleware: 'auth'
+  })
+
   /* グローバル変数 */
   const { $pageTransition } = useNuxtApp(); // ページ遷移
   const appDialogRef = ref(); // ダイアログ
