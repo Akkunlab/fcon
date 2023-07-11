@@ -26,11 +26,14 @@ export const useUser = () => {
 
   // ユーザ情報を取得
   const user = useState<User>('user', () => {
+    const jsonObj = localStorage.getItem('user'); // ローカルストレージから取得
+    const parsedObj: User = jsonObj ? JSON.parse(jsonObj) : null; // JSONをパース
+  
     return {
-      name: '',
-      ranking: 0,
-      point: 0
-    }
+      name: parsedObj?.name || '',
+      ranking: parsedObj?.ranking || 0,
+      point: parsedObj?.point || 0
+    };
   });
 
   // サインアップ
@@ -79,7 +82,7 @@ export const useUser = () => {
 
       loginIdCookie.value = loginId; // Cookieにlogin idを保存
       isLoggedInCookie.value = 'true'; // ログイン状態をtrueにする
-      user.value = data; // ユーザ情報を更新
+      saveUser(data); // ユーザ情報を保存
 
       await navigateTo('/home'); // ホーム画面に遷移
     } catch (error) {
@@ -90,6 +93,12 @@ export const useUser = () => {
   // ログアウト処理
   const logout = (): void => {
     isLoggedInCookie.value = 'false'; // ログイン状態をfalseにする
+  }
+
+  //  ユーザ情報を保存
+  const saveUser = (userData: User): void => {
+    user.value = userData; // ユーザ情報を更新
+    localStorage.setItem('user', JSON.stringify(user.value)); // ユーザ情報を保存
   }
 
   // エクスポート

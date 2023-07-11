@@ -14,7 +14,7 @@
         <!-- ユーザー -->
         <div class="text-center">
           <v-avatar size="64" color="surface-variant"></v-avatar>
-          <p class="text-h6 mt-2">Name</p>
+          <p class="text-h6 mt-2">{{ user.name }}</p>
         </div>
         
         <!-- 区切り線 -->
@@ -39,6 +39,7 @@
 <script setup lang="ts">
 
   /* グローバル変数 */
+  const { user } = useUser(); // ユーザー情報
   const dialog = useState('dialog', () => false); // ダイアログの状態
 
   // メニューリスト

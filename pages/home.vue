@@ -17,7 +17,10 @@
       <!-- ステータス -->
       <v-row class="status mx-2 mt-3">
         <v-col class="px-0">
-          <p class="status-text pl-8 pr-3">ポイント: 333</p>
+          <p class="status-text pl-8 pr-3">
+            <span class="pr-2">ポイント:</span>
+            <span>{{ user.point }}</span>
+          </p>
         </v-col>
       </v-row>
 
@@ -54,6 +57,7 @@
   })
 
   /* グローバル変数 */
+  const { user } = useUser(); // ユーザー情報
   const { $pageTransition } = useNuxtApp(); // ページ遷移
   const appDialogRef = ref(); // ダイアログ
 
