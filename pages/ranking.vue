@@ -63,7 +63,7 @@
     let previousScore: number | null = null; // 前のスコア
     const { data }: { data: Data } = await useFetch('/api/rankings'); // ユーザーのランキングを取得
 
-    // スコアでソート
+    // ループで順位を設定
     data.value.data.forEach((user, index) => {
       currentRank = user.point !== previousScore ? index + 1 : currentRank; // スコアが前のスコアと同じ場合は順位を変更しない
       data.value.data[index].rank = currentRank; // 順位を設定
