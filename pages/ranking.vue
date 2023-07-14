@@ -16,12 +16,12 @@
       <v-card class="ranking-card fade-in my-3">
         <v-card-text>
           <v-list class="ranking-list pa-0">
-            <v-list-item class="ranking-item my-2" v-for="item in 100" height="50" rounded="xl">
+            <v-list-item class="ranking-item my-2" v-for="item in rankingList" height="50" rounded="xl">
               <v-container class="pa-0" style="display: flex; align-items: center;">
-                <p class="text-body-1">1</p>
+                <p class="text-body-1">{{ item.rank }}</p>
                 <v-avatar size="32" color="surface-variant" class="mx-2"></v-avatar>
-                <v-list-item-title class="text-body-1" v-text="33333333"></v-list-item-title>
-                <p style="margin-left: auto; white-space: nowrap">10000 pt</p>
+                <v-list-item-title class="text-body-1">{{ item.name }}</v-list-item-title>
+                <p style="margin-left: auto; white-space: nowrap">{{ item.point }} pt</p>
               </v-container>
             </v-list-item>
           </v-list>
@@ -34,19 +34,46 @@
 
 <script setup lang="ts">
 
+  /* データの型 */
+  interface Data {
+    value: {
+      data: rankingData[];
+    };
+  }
+
+  /* ランキングデータの型 */
+  interface rankingData {
+    name: string;
+    point: number;
+    rank?: number;
+  }
+
   /* グローバル変数 */
   const { $pageTransition } = useNuxtApp(); // ページ遷移
-
-  // ランキングリスト
-  const rankingList = [
-    { rank: 1, name: 'Akkunlab' }
-  ];
 
   /* 高さを取得 */
   const setHeight = (): void => {
     let height = window.innerHeight - 82; // 82pxはタイトル、余白を合わせた高さ
     document.documentElement.style.setProperty('--vh', `${height}px`); // 高さを設定
   }
+
+  /* ランキングリストを取得 */
+  const getRankingList = async (): Promise<rankingData[]> => {
+    let currentRank: number = 1; // 現在の順位
+    let previousScore: number | null = null; // 前のスコア
+    const { data }: { data: Data } = await useFetch('/api/rankings'); // ユーザーのランキングを取得
+
+    // スコアでソート
+    data.value.data.forEach((user, index) => {
+      currentRank = user.point !== previousScore ? index + 1 : currentRank; // スコアが前のスコアと同じ場合は順位を変更しない
+      data.value.data[index].rank = currentRank; // 順位を設定
+      previousScore = user.point; // 前のスコアを更新
+    });
+
+    return data.value.data;
+  }
+
+  const rankingList: rankingData[] = await getRankingList(); // ランキングリスト
 
   setHeight(); // 初期化
   window.addEventListener('resize', setHeight); // リサイズ時に高さを設定
