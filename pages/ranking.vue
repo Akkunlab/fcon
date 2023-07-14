@@ -15,10 +15,10 @@
       <!-- ランキングリスト -->
       <v-card class="ranking-card fade-in my-3">
         <v-card-text>
-          <v-list class="ranking-list pa-0">
+          <v-list class="ranking-list pa-0" v-if="isRankingLoaded">
             <v-list-item class="ranking-item my-2" v-for="item in rankingList" height="50" rounded="xl">
               <v-container class="pa-0" style="display: flex; align-items: center;">
-                <p class="text-body-1">{{ item.rank }}</p>
+                <p class="text-body-1" style="width: 30px;">{{ item.rank }}</p>
                 <v-avatar size="32" color="surface-variant" class="mx-2"></v-avatar>
                 <v-list-item-title class="text-body-1">{{ item.name }}</v-list-item-title>
                 <p style="margin-left: auto; white-space: nowrap">{{ item.point }} pt</p>
@@ -45,11 +45,16 @@
   interface rankingData {
     name: string;
     point: number;
-    rank?: number;
+    rank?: number | null;
   }
 
   /* グローバル変数 */
   const { $pageTransition } = useNuxtApp(); // ページ遷移
+  const isRankingLoaded = ref(true); // ランキングリストが読み込まれたか（最初のtrueは初期化）
+  let rankingList: rankingData[] = []; // ランキングリスト
+
+  /* ランキングリストを初期化 */
+  for (let i = 0; i < 10; i++) rankingList.push({ name: '', point: 0, rank: null });
 
   /* 高さを取得 */
   const setHeight = (): void => {
@@ -73,7 +78,11 @@
     return data.value.data;
   }
 
-  const rankingList: rankingData[] = await getRankingList(); // ランキングリスト
+  setTimeout(async () => {
+    rankingList = await getRankingList();
+    isRankingLoaded.value = false;
+    isRankingLoaded.value = true;
+  }, 10);
 
   setHeight(); // 初期化
   window.addEventListener('resize', setHeight); // リサイズ時に高さを設定
