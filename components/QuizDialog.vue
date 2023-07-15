@@ -24,20 +24,20 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <v-text-field v-model="state.title" label="タイトル*" :rules="[requiredValidation]" required></v-text-field>
+                <v-text-field v-model="state.title" label="タイトル*" :rules="[$requiredValidation]" required></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field v-model="state.text" label="問題文*" :rules="[requiredValidation]" required></v-text-field>
+                <v-text-field v-model="state.text" label="問題文*" :rules="[$requiredValidation]" required></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field v-model="state.answer" label="問題の答え*" :rules="[requiredValidation]" required></v-text-field>
+                <v-text-field v-model="state.answer" label="問題の答え*" :rules="[$requiredValidation]" required></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-select
                   v-model="state.difficulty"
                   label="難易度*"
                   :items="[1, 2, 3, 4, 5]"
-                  :rules="[requiredValidation]"
+                  :rules="[$requiredValidation]"
                   required>
                 </v-select>
               </v-col>
@@ -46,7 +46,7 @@
                   v-model="state.category"
                   label="カテゴリ*"
                   :items="['数学', '物理', '化学', '生物', '地学', '情報', '英語', '国語', '歴史', '地理', 'その他']"
-                  :rules="[requiredValidation]"
+                  :rules="[$requiredValidation]"
                   multiple
                   required>
                 </v-autocomplete>
@@ -105,9 +105,6 @@
     difficulty: 1,
     category: []
   });
-
-  // バリデーション
-  const requiredValidation = (value: any) => !!value || '必ず入力してください'; // 入力必須の制約
 
   // フォームの送信
   const handleSubmit = async () => {

@@ -76,7 +76,7 @@
     switch (target.id) {
       case 'ranking': $pageTransition('home-inner', '/ranking'); break; // ランキング画面へ遷移
       case 'quest': break;
-      case 'menu': appDialogRef.value.dialog = true; break; // ダイアログを開く
+      case 'menu': appDialogRef.value.openDialog(); break; // ダイアログを開く
     }
   }
 </script>

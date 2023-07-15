@@ -21,7 +21,7 @@
             <v-container>
               <v-row>
                 <v-col cols="12">
-                  <v-text-field v-model="name" label="ニックネーム" :rules="[requiredValidation]" required></v-text-field>
+                  <v-text-field v-model="name" label="ニックネーム" :rules="[$requiredValidation]" required></v-text-field>
                 </v-col>
               </v-row>
             </v-container>
@@ -53,9 +53,6 @@
   const { signup } = useUser(); // ユーザー情報
   const form = ref(); // フォーム
   const name = ref(''); // ニックネーム
-
-  // バリデーション
-  const requiredValidation = (value: any) => !!value || '必ず入力してください'; // 入力必須の制約
 
   /* フォームの送信 */
   const handleSubmit = async () => {

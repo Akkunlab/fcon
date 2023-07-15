@@ -6,31 +6,60 @@
       <v-btn class="dialog-close ma-2" icon="mdi-close" variant="text" @click.stop="dialog = false"></v-btn>
 
       <!-- タイトル -->
-      <v-card-title class="pt-4">メニュー</v-card-title>
+      <v-card-title class="pt-4">{{ menuList.find(item => item.value === content)?.text || 'メニュー' }}</v-card-title>
 
       <!-- メニュー -->
-      <v-card-text class="pa-4">
+      <transition>
+        <v-card-text class="pa-4" v-if="content === 'menu'">
 
-        <!-- ユーザー -->
-        <div class="text-center">
-          <v-avatar size="64" color="surface-variant"></v-avatar>
-          <p class="text-h6 mt-2">{{ user.name }}</p>
-        </div>
+          <!-- ユーザー -->
+          <div class="text-center">
+            <v-avatar size="64" color="surface-variant"></v-avatar>
+            <p class="text-h6 mt-2">{{ user.name }}</p>
+          </div>
+
+          <!-- 区切り線 -->
+          <v-divider class="my-2"></v-divider>
+
+          <!-- メニュリスト -->
+          <v-list class="dialog-menu">
+            <v-list-item class="dialog-menu-item my-2" v-for="item in menuList" :key="item.value" rounded="xl" @click.stop="handleBtnClick(item.value)">
+              <template v-slot:prepend>
+                <v-icon :icon="item.icon"></v-icon>
+              </template>
+              <v-list-item-title v-text="item.text"></v-list-item-title>
+            </v-list-item>
+          </v-list>
+
+          </v-card-text>
+      </transition>
         
-        <!-- 区切り線 -->
-        <v-divider class="my-2"></v-divider>
-
-        <!-- メニュリスト -->
-        <v-list class="dialog-menu">
-          <v-list-item class="dialog-menu-item my-2" v-for="(item, i) in menuList" :key="i" :value="item" rounded="xl">
-            <template v-slot:prepend>
-              <v-icon :icon="item.icon"></v-icon>
-            </template>
-            <v-list-item-title v-text="item.text"></v-list-item-title>
-          </v-list-item>
-        </v-list>
-
-      </v-card-text>
+      <!-- メニュー: プロフィール -->
+      <transition>
+        <v-card-text class="pa-4" v-if="content === 'profile'">
+          <v-form ref="form" @submit.prevent="handleSubmit">
+            
+            <!-- input -->
+            <v-card-text class="pa-0">
+              <v-container class="pa-0">
+                <v-row>
+                  <v-col cols="12">
+                    <v-text-field v-model="name" label="ニックネーム" :rules="[$requiredValidation]" required></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+          
+            <!-- ボタン -->
+            <v-card-actions class="py-4">
+              <v-spacer></v-spacer>
+              <v-btn class="text-body-1 mx-2 px-8" color="blue-accent-3" variant="flat" type="submit">更新</v-btn>
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          
+          </v-form>
+        </v-card-text>
+      </transition>
 
     </v-card>
   </v-dialog>
@@ -41,6 +70,9 @@
   /* グローバル変数 */
   const { user } = useUser(); // ユーザー情報
   const dialog = useState('dialog', () => false); // ダイアログの状態
+  const content = ref('menu'); // ダイアログのコンテンツ
+  const form = ref(); // フォーム
+  const name = ref(user.value.name); // ニックネーム
 
   // メニューリスト
   const menuList = [
@@ -48,8 +80,28 @@
     { icon: 'mdi-cog', text: '設定', value: 'setting' }
   ];
 
+  /* ダイアログを開く */
+  const openDialog = (): void => {
+    content.value = 'menu';
+    dialog.value = true;
+  }
+
+  /* ボタンをクリックしたとき */
+  const handleBtnClick = (value: string): void => {
+    content.value = ''; // ダイアログのコンテンツを初期化
+    setTimeout(() => content.value = value, 500); // ダイアログのコンテンツを更新
+  }
+
+  /* フォームの送信 */
+  const handleSubmit = async () => {
+
+    const validResult = await form.value.validate(); // バリデーションの結果を取得
+  
+    if (!validResult.valid) return; // バリデーションに失敗したら終了
+  }
+
   // 公開情報
-  defineExpose({ dialog });
+  defineExpose({ openDialog });
 </script>
 
 <style lang="scss" scoped>
@@ -80,5 +132,13 @@
         border: 2px solid $dialog-btn-border-color;
       }
     }
+  }
+
+  /* トランジション */
+  .v-enter-active, .v-leave-active {
+    transition: opacity $fade-time ease;
+  }
+  .v-enter-from, .v-leave-to {
+    opacity: 0;
   }
 </style>
