@@ -1,12 +1,15 @@
 <template>
   <v-dialog v-model="dialog">
     <v-card class="dialog-card pa-2">
+      
+      <!-- 戻るボタン -->
+      <v-btn class="dialog-back ml-2 mt-4" icon="mdi-arrow-left" variant="text" @click.stop="handleBtnClick('menu')" v-if="content !== 'menu'"></v-btn>
 
       <!-- 閉じるボタン -->
       <v-btn class="dialog-close ma-2" icon="mdi-close" variant="text" @click.stop="dialog = false"></v-btn>
 
       <!-- タイトル -->
-      <v-card-title class="pt-4">{{ menuList.find(item => item.value === content)?.text || 'メニュー' }}</v-card-title>
+      <v-card-title class="text-center pt-4">{{ title }}</v-card-title>
 
       <!-- メニュー -->
       <transition>
@@ -70,6 +73,7 @@
   /* グローバル変数 */
   const { user } = useUser(); // ユーザー情報
   const dialog = useState('dialog', () => false); // ダイアログの状態
+  const title = ref('メニュー'); // ダイアログのタイトル
   const content = ref('menu'); // ダイアログのコンテンツ
   const form = ref(); // フォーム
   const name = ref(user.value.name); // ニックネーム
@@ -89,7 +93,13 @@
   /* ボタンをクリックしたとき */
   const handleBtnClick = (value: string): void => {
     content.value = ''; // ダイアログのコンテンツを初期化
-    setTimeout(() => content.value = value, 500); // ダイアログのコンテンツを更新
+    title.value = ''; // ダイアログのタイトルを初期化
+
+    // ダイアログを更新
+    setTimeout(() => {
+      content.value = value;
+      title.value = menuList.find(item => item.value === value)?.text || 'メニュー';
+    }, 500);
   }
 
   /* フォームの送信 */
@@ -114,6 +124,12 @@
     border: 1px solid $dialog-border-color;
     background: $dialog-background-color;
     border-radius: $border-radius !important;
+
+    // 戻るボタン
+    .dialog-back {
+      inset: 0 auto auto 0; // top right bottom left
+      position: absolute;
+    }
 
     // 閉じるボタン
     .dialog-close {
