@@ -3,13 +3,13 @@
     <v-card class="dialog-card pa-2">
       
       <!-- 戻るボタン -->
-      <v-btn class="dialog-back ml-2 mt-4" icon="mdi-arrow-left" variant="text" @click.stop="handleBtnClick('menu')" v-if="content !== 'menu'"></v-btn>
+      <v-btn class="dialog-back ml-2 mt-4" icon="mdi-arrow-left" variant="text" @click.stop="handleBtnClick('menu')" v-if="content && content !== 'menu'"></v-btn>
 
       <!-- 閉じるボタン -->
       <v-btn class="dialog-close ma-2" icon="mdi-close" variant="text" @click.stop="dialog = false"></v-btn>
 
       <!-- タイトル -->
-      <v-card-title class="text-center pt-4">{{ title }}</v-card-title>
+      <v-card-title class="text-center pt-4" style="height: 56px;">{{ title }}</v-card-title>
 
       <!-- メニュー -->
       <transition>
@@ -99,7 +99,7 @@
     setTimeout(() => {
       content.value = value;
       title.value = menuList.find(item => item.value === value)?.text || 'メニュー';
-    }, 500);
+    }, 550);
   }
 
   /* フォームの送信 */
@@ -118,6 +118,7 @@
 
   /* ダイアログ */
   .dialog-card {
+    min-height: 252px;
     color: $text-color-light;
     position: relative;
     backdrop-filter: blur($blur-size);
